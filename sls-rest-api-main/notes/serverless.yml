@@ -13,11 +13,17 @@ provider:
   lambdaHashingVersion: 20201221
   stage: dev 
   region: us-east-1
+  
 
 
 functions:
   createNote:
     handler: handler.createNote
+    iamRoleStatements:
+    - Effect: Allow 
+      Action: 
+        - dynamodb:PutItem 
+      Resource: !GetAtt notesTable.Arn 
     events:
       - http: 
           method: post 
@@ -39,7 +45,10 @@ functions:
     events:
       - http: 
           method: get
-          path: notes      
+          path: notes   
+
+plugins:
+  - serverless-iam-roles-per-function             
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
@@ -81,21 +90,22 @@ functions:
 #      variable2: value2
 
 # you can add CloudFormation resource templates here
-resources:
-  Resources:
-    notesTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: notes
-        BillingMode: PAY_PER_REQUEST
-        AttributeDefinitions: 
-          - AttributeName: notesId
-            AttributeType: S
-        KeySchema: 
-          - AttributeName: notesId
-            KeySType: HASH    
-         
-
+resources: # CloudFormation template syntax from here on.
+      Resources:
+        notesTable:
+          Type: AWS::DynamoDB::Table
+          Properties:
+            TableName: notes
+            BillingMode: PAY_PER_REQUEST
+            AttributeDefinitions:
+              - AttributeName: notesId
+                AttributeType: S
+            KeySchema:
+              - AttributeName: notesId
+                KeyType: HASH
+            #ProvisionedThroughput:
+            #  ReadCapacityUnits: 1
+            #  WriteCapacityUnits: 1
 
 
 
