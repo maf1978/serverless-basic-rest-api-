@@ -8,11 +8,5 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "aws-sdk": "^2.1115.0"
-  },
-  "devDependencies": {
-    "serverless-iam-roles-per-function": "^3.2.0"
-  }
+  "license": "ISC"
 }
